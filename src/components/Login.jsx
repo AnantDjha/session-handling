@@ -5,7 +5,7 @@ import axios from "axios"
 
 
 
-export default function Login()
+export default function Login({setUser})
 {
     const navigate = useNavigate()
 
@@ -19,6 +19,7 @@ export default function Login()
     const [resultData,setResultData] = useState()
     const onSubmit = async (data) => {
         try {
+            axios.defaults.withCredentials = true;
             let response = await axios.post("http://localhost:5000/login", data, {
                 headers: {
                     "Content-Type": "application/json"
@@ -26,7 +27,8 @@ export default function Login()
             });
     
             let result = response.data;    
-            setResultData(result);
+            setUser(result);
+            setResultData(result)
         } catch (e) {
             console.log(e);
         }

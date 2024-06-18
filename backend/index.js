@@ -9,7 +9,12 @@ const bodyParser = require("body-parser")
 
 const app = express();
 
-app.use(cors())
+const corsOptions = {
+    origin: 'http://localhost:5173', // or your specific origin
+    credentials: true, // this will enable the Access-Control-Allow-Credentials CORS header
+  };
+  
+  app.use(cors(corsOptions));
 app.use(express.json())
 app.use(session({
     resave: false,
@@ -18,7 +23,7 @@ app.use(session({
 
     cookie:{
         secure:false,
-        maxAge: 1000 * 60 * 60 *24
+        maxAge: 1000*5
     }
 }))
 app.use(cookieParser())
@@ -72,7 +77,7 @@ app.post("/login", async (req, res) => {
                 req.session.user = data[0].name
                 // await req.session.save();
 
-                res.status(200).send({ message: "succesfull" })
+                res.status(200).send({ message: "succesfull",name: data[0].name})
             }
         }
         else {

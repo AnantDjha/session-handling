@@ -2,28 +2,33 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Home() {
-    const [data, setData] = useState([]);
-    const navigate = useNavigate()
+export default function Home({user}) {
+    const [time ,setTime] = useState(5)
+   const navigate = useNavigate() 
+useEffect(()=>{
+    if(!user)
+    {
+        navigate("/login")
+    }
+    if(user.valid == false)
+        {
+        navigate("/login")
 
-   
+        }
+},[user])
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/user")
-        .then(response => {
-            // console.log(response.data);
-            if(!response.data.valid)
-                {
-                    navigate("/login")
-                }
-            data.push(response.data);
-        })
-        .catch(error => console.log(error));
-    }, []);
-
+useEffect(()=>{
+    const intervalId = setInterval(() => {
+        setTime(a => a - 1);
+      }, 1000);
+    
+      // Cleanup function to clear the interval
+      return () => clearInterval(intervalId);
+},[])
     return (
         <div>
-            {data.length > 0 && data[0].valid && <p>{data[0].user}</p>}
+           {user && user.valid ? <h1>Wellcome , {user.user}</h1> : <p>no data is availble</p>}
+           <h2>Your session will expire in {time}</h2>
         </div>
     );
 }
